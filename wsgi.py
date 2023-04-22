@@ -20,16 +20,16 @@ competition = []
 def initialize():
     db.drop_all()
     db.create_all()
-    #create_user('bob', 'bobpass')
-    #db.session.add(bob)
-    db.session.commit()
+    bob = create_user('bob', 'bobpass')
+    db.session.add(bob)
 
-    with open('competitions.csv', newline='', encoding='utf8') as csvfile:
+    with open('competitions.csv', newline='', encoding='latin-1') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            competition = Competition(name=row['name'], category=row['category'], winner=row['winner'], runnerup=row['runnerup'])
+            competition = Competition(name=row['name'], category=row['category'], winner=row['winner'], runnerup=row['runnerup'], description=row['description'])
             db.session.add(competition)
         db.session.commit()
+
     print('database intialized')
 
 '''
