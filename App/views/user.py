@@ -19,6 +19,16 @@ def get_user_page():
     users = get_all_users()
     return render_template('users.html', users=users)
 
+@user_views.route('/login', methods=['GET'])
+def get_login_page():
+    users = get_all_users()
+    return render_template('login.html', users=users)
+
+@user_views.route('/signup', methods=['GET'])
+def get_signup_page():
+    users = get_all_users()
+    return render_template('signup.html', users=users)
+
 @user_views.route('/api/users', methods=['GET'])
 def get_users_action():
     users = get_all_users_json()
