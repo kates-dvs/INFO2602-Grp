@@ -21,6 +21,16 @@ def get_user_page():
     users = get_all_users()
     return render_template('users.html', users=users)
 
+@auth_views.route('/login', methods=['GET'])
+def get_login_page():
+    users = get_all_users()
+    return render_template('login.html', users=users)
+
+@auth_views.route('/signup', methods=['GET'])
+def get_signup_page():
+    users = get_all_users()
+    return render_template('signup.html', users=users)
+
 
 @auth_views.route('/identify', methods=['GET'])
 @login_required
