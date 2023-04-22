@@ -27,14 +27,15 @@ class CompetitonUser(db.Model):
             'competition' : self.competition.name,
             'category' : self.competition.category,
             'winner' : self.competition.winner,
-            'runner up' : self.competition.runnerup
+            'runner up' : self.competition.runnerup,
+            'description' : self.competition.description
         }
      
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username =  db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String(120), nullable=False)
-    competition = db.relationship('UserCompetition', backref='user')
+    #competition = db.relationship('UserCompetition', backref='user')
 
     def __init__(self, username, password):
         self.username = username
@@ -60,13 +61,15 @@ class Competition(db.Model):
     category = db.Column(db.String(255), nullable=False)
     winner = db.Column(db.String(255), nullable=False)
     runnerup = db.Column(db.String(255), nullable=False)
-    
+    description = db.Column(db.String(1000), nullable=False)
+
     def get_json(self):
         return{
             'competition_id': self.id,
             'name' : self.name,
             'category' : self.category,
             'winner' : self.winner,
-            'runner up' : self.runnerup
+            'runner up' : self.runnerup,
+            'description': self.description
         }
 
