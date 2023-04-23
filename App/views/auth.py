@@ -30,7 +30,7 @@ def get_login_page():
 
 @auth_views.route('/logout', methods=['GET'])
 def logout_action():
-  #logout_user()
+  logout_user()
   flash('Logged Out')
   return redirect(url_for('auth_views.get_login_page'))
 

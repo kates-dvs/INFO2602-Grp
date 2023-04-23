@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
-from flask_login import current_user, login_required, login_user, LoginManager
+from flask_login import current_user, login_required, login_user, LoginManager, logout_user
 from App.models import Competition, CompetitonUser, User, db
 
 from.index import index_views
@@ -12,8 +12,6 @@ from App.controllers import (
     get_all_users_json,
     jwt_required,
 )
-
-login_manager = LoginManager()
 
 user_views = Blueprint('user_views', __name__, template_folder='../templates')
 
@@ -34,7 +32,7 @@ def get_login_page():
 
 @user_views.route("/logout", methods=['GET'])
 def logout_action():
-  #logout_user()
+  logout_user()
   flash('Logged Out')
   return redirect(url_for('user_views.get_login_page'))
 
