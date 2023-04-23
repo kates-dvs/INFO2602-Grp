@@ -14,6 +14,7 @@ from App.controllers import (
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
 
 @auth_views.route('/', methods=['GET'])
+@login_required
 def get_home_page():
     competitions = Competition.query.all()
     return render_template("home.html", competitions=competitions)
@@ -29,6 +30,7 @@ def get_login_page():
     return render_template('login.html', users=users)
 
 @auth_views.route('/logout', methods=['GET'])
+@login_required
 def logout_action():
   logout_user()
   flash('Logged Out')
@@ -59,7 +61,7 @@ def user_login_api():
         login_user(user)
         return redirect(url_for('auth_views.get_home_page'))
     else:
-        return jsonify(message='bad username or password given'), 401
+        flash('Invalid username or password')
     return redirect('/login')
 
 @auth_views.route('/api/identify', methods=['GET'])

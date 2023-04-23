@@ -16,6 +16,7 @@ from App.controllers import (
 user_views = Blueprint('user_views', __name__, template_folder='../templates')
 
 @user_views.route('/', methods=['GET'])
+@login_required
 def get_home_page():
     competitions = Competition.query.all()
     return render_template("home.html", competitions=competitions)
@@ -31,12 +32,14 @@ def get_login_page():
     return render_template('login.html', users=users)
 
 @user_views.route("/logout", methods=['GET'])
+@login_required
 def logout_action():
   logout_user()
   flash('Logged Out')
   return redirect(url_for('user_views.get_login_page'))
 
 @user_views.route("/competition/<int:competition_id>", methods=['GET'])
+@login_required
 def get_desc(competition_id):
   competitions = Competition.query.all()
   compid = competition_id
@@ -68,8 +71,23 @@ def user_login_api():
         login_user(user)
         return redirect(url_for('user_views.get_home_page'))
     else:
-        return jsonify(message='bad username or password given'), 401
+        flash('Invalid username or password')
     return redirect('/login')
+
+@user_views.route("/signup", methods=['POST'])
+def signup_action():
+  data = request.form
+  newuser = User(username=data['username'], password=data['password'])
+  try:
+    db.session.add(newuser)
+    db.session.commit()
+    login_user(newuser)
+    flash('Account Created!')
+    return redirect(url_for('user_views.get_home_page'))
+  except Exception:
+    db.session.rollback()
+    flash("Username or email already exists")
+  return redirect(url_for('user_views.get_signup_page'))
 
 @user_views.route('/api/identify', methods=['GET'])
 @jwt_required()
