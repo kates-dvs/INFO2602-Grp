@@ -6,12 +6,12 @@ from.index import index_views
 
 from App.controllers import (
     create_user,
-    authenticate, 
+    jwt_authenticate, 
 )
 
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
 
-@auth_view.route("/", methods=['GET'])
+@auth_views.route("/", methods=['GET'])
 def get_home_page():
     competitions = Competition.query.all()
     return render_template("home.html", competitions=competitions)
