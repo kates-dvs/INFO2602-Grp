@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}CodeX{% endblock %}
+{% block page %}CodeX{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+    <h1>Competitions</h1>
+    <p>Below is a list winners & runners-up of various coding competitions held by different organizations for programmers of all skill levels.</p>
+
+    <div class="card">
+        <div class="col m4">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Winner</th>
+                    <th>Runner-up</th>
+                    <th>Description</th>
+                </tr>
+                {% for competition in competitions %}
+                    <form name="ExpandDescription" class="card" method="GET" action="/">
+                        <tr>
+                            <td>{{competition.name}}</td>
+                            <td>{{competition.category}}</td>
+                            <td>{{competition.winner}}</td>
+                            <td>{{competition.runnerup}}</td>
+                            <td>
+                                <div class="cardActions">
+                                    <a class="btn aquamarine right" href="/" id="ExpandBtn" style="position:relative; left:-70px; bottom:0px;">Description</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </form>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}
