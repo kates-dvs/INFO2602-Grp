@@ -26,6 +26,12 @@ def get_login_page():
     users = get_all_users()
     return render_template('login.html', users=users)
 
+@auth_views.route('/logout', methods=['GET'])
+def logout_action():
+  #logout_user()
+  flash('Logged Out')
+  return redirect(url_for('auth_views.get_login_page'))
+
 @auth_views.route('/signup', methods=['GET'])
 def get_signup_page():
     users = get_all_users()
