@@ -54,6 +54,28 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         """Check hashed password."""
         return check_password_hash(self.password, password)
+    
+    def save_competition(self, competition_id, name):
+        comp = Competition.query.get(competition_id)
+        if comp:
+            try:
+                competition = UserCompetition(self.id, competition_id, name)
+                db.session.add(competition)
+                db.session.commit()
+                return competition
+            except Exception:
+                db.session.rollback()
+                return None
+            return None
+
+    def rename_userdescription(self, competition_id, name):
+        comp = UserCompetition.query.get(competition_id)
+        if comp.user == self:
+            comp.name = name
+            db.session.add(comp)
+            db.session.commit()
+            return True
+        return None
 
 class Competition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
