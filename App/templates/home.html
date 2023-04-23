@@ -4,6 +4,12 @@
 
 {{ super() }}
 
+{% block link%}
+<ul id="nav-mobile" class="right">
+    <li><a href="/logout">Logout</a></li>
+</ul>
+{% endblock %}
+
 {% block content %}
     <h1>Competitions</h1>
     <p>Below is a list winners & runners-up of various coding competitions held by different organizations for programmers of all skill levels.</p>
