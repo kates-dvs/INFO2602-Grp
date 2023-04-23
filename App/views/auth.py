@@ -1,17 +1,19 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
-from flask_jwt_extended import jwt_required, current_user
+from flask_jwt_extended import jwt_required, current_user as jwt_current_user
+from flask_login import login_required, login_user, current_user, logout_user
 from App.models import Competition, CompetitonUser, User, db
 
 from.index import index_views
 
 from App.controllers import (
     create_user,
-    jwt_authenticate, 
+    jwt_authenticate,
+    login 
 )
 
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
 
-@auth_views.route("/", methods=['GET'])
+@auth_views.route('/', methods=['GET'])
 def get_home_page():
     competitions = Competition.query.all()
     return render_template("home.html", competitions=competitions)
@@ -48,13 +50,17 @@ def create_user_endpoint():
     create_user(data['username'], data['password'])
     return jsonify({'message': f"user {data['username']} created"})
 
-@auth_views.route('/api/login', methods=['POST'])
+@auth_views.route('/login', methods=['POST'])
 def user_login_api():
-  data = request.json
-  token = authenticate(data['username'], data['password'])
-  if not token:
-    return jsonify(message='bad username or password given'), 401
-  return jsonify(access_token=token)
+    data = request.form
+    user = User.query.filter_by(username=data['username']).first()
+    if user and user.check_password(data['password']):
+        flash('Logged in successfully.')
+        login_user(user)
+        return redirect(url_for('auth_views.get_home_page'))
+    else:
+        return jsonify(message='bad username or password given'), 401
+    return redirect('/login')
 
 @auth_views.route('/api/identify', methods=['GET'])
 @jwt_required()

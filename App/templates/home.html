@@ -11,30 +11,39 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Competitions</h1>
-    <p>Below is a list winners & runners-up of various coding competitions held by different organizations for programmers of all skill levels.</p>
+
+    <div class="card">
+        <h1><b>Competition Results</b></h1>
+        <p>Below is a list winners & runners-up of various coding competitions held by different organizations for programmers of all skill levels.</p>
+    </div>
 
     <div class="card">
         <div class="col m4">
             <table>
                 <tr>
-                    <th>Name</th>
+                    <th>Competition Name</th>
                     <th>Category</th>
                     <th>Winner</th>
                     <th>Runner-up</th>
                     <th>Description</th>
                 </tr>
                 {% for competition in competitions %}
-                    <form name="ExpandDescription" class="card" method="GET" action="/">
+                    <form name="ExpandDescription" class="card">
                         <tr>
                             <td>{{competition.name}}</td>
                             <td>{{competition.category}}</td>
                             <td>{{competition.winner}}</td>
                             <td>{{competition.runnerup}}</td>
                             <td>
-                                <div class="cardActions">
-                                    <a class="btn aquamarine right" href="/" id="ExpandBtn" style="position:relative; left:-70px; bottom:0px;">Description</a>
-                                </div>
+                                {% if competition.id != compid %}
+                                    <div class="cardActions">
+                                        <a class="btn aquamarine right" href="/competition/{{competition.id}}" id="ExpandBtn" style="position:relative; left:-70px; bottom:0px;">Description</a>
+                                    </div>
+                                {% endif %}
+
+                                {% if competition.id == compid %}
+                                    <div id="expandedDesc">{{competition.description}}</div>
+                                {% endif %}
                             </td>
                         </tr>
                     </form>
@@ -43,5 +52,9 @@
         </div>
     </div>
 
+    <script>
+        var compElem = document.getElementById('expandedDesc');// edit to scroll to selected pokemon
+        compElem.scrollIntoView();
+    </script>
 
 {% endblock %}
