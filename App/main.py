@@ -1,4 +1,5 @@
 import os
+import csv
 from flask import Flask
 from flask_login import LoginManager, current_user
 from flask_uploads import DOCUMENTS, IMAGES, TEXT, UploadSet, configure_uploads
@@ -6,7 +7,9 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 from datetime import timedelta
-from .models import User, db
+from .models import User, Competition, CompetitonUser, db
+from App.database import db
+from App.controllers import ( create_user, get_all_users_json, get_all_users )
 
 
 from App.database import init_db
@@ -69,6 +72,19 @@ def create_app(config={}):
     init_db(app)
     setup_jwt(app)
     app.app_context().push()
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+        bob = create_user('bob', 'bobpass', True)
+        db.session.add(bob)
+
+        with open('competitions.csv', newline='', encoding='latin-1') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                competition = Competition(name=row['name'], category=row['category'], winner=row['winner'], runnerup=row['runnerup'], description=row['description'])
+                db.session.add(competition)
+            db.session.commit()
+        print('database intialized')
     return app
 
 app = create_app()
