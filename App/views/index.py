@@ -21,6 +21,7 @@ def init():
             competition = Competition(name=row['name'], category=row['category'], winner=row['winner'], runnerup=row['runnerup'], description=row['description'])
             db.session.add(competition)
         db.session.commit()
+    flash('database initalized')
     return jsonify(message='db initialized!')
 
 @index_views.route('/health', methods=['GET'])
