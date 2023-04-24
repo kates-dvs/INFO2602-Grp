@@ -20,7 +20,7 @@ competition = []
 def initialize():
     db.drop_all()
     db.create_all()
-    bob = create_user('bob', 'bobpass')
+    bob = create_user('bob', 'bobpass', True)
     db.session.add(bob)
 
     with open('competitions.csv', newline='', encoding='latin-1') as csvfile:

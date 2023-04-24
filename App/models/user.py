@@ -1,6 +1,6 @@
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask_login import UserMixin
 from App.database import db
+from flask_login import UserMixin
 
 #db = SQLAlchemy()
 
@@ -30,16 +30,18 @@ class CompetitonUser(db.Model):
             'runner up' : self.competition.runnerup,
             'description' : self.competition.description
         }
-     
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username =  db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String(120), nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False)
     #competition = db.relationship('UserCompetition', backref='user')
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, is_admin):
         self.username = username
         self.set_password(password)
+        self.is_admin = is_admin
 
     def get_json(self):
         return{
@@ -94,4 +96,21 @@ class Competition(db.Model):
             'runner up' : self.runnerup,
             'description': self.description
         }
+
+    def delete_competition(comp_id):
+        comp = Competition.query.get(comp_id)
+        db.session.delete(comp)
+        db.session.commit()
+        return True
+
+    def edit_competition(comp_id, name, category, winner, runnerup, description):
+        comp = Competition.query.get(comp_id)
+        comp.name = name
+        comp.category = category
+        comp.winner = winner
+        comp.runnerup = runnerup
+        comp.description = description
+        db.session.add(comp)
+        db.session.commit()
+        return True
 

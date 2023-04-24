@@ -18,8 +18,9 @@ user_views = Blueprint('user_views', __name__, template_folder='../templates')
 @user_views.route('/', methods=['GET'])
 @login_required
 def get_home_page():
+    admin = current_user.is_admin
     competitions = Competition.query.all()
-    return render_template("home.html", competitions=competitions)
+    return render_template("home.html", competitions=competitions, admin=admin)
 
 @user_views.route('/users', methods=['GET'])
 def get_user_page():
@@ -43,8 +44,25 @@ def logout_action():
 def get_desc(competition_id):
   competitions = Competition.query.all()
   compid = competition_id
+  admin = current_user.is_admin
 
-  return render_template("home.html", competitions=competitions, compid=compid)
+  return render_template("home.html", competitions=competitions, compid=compid, admin=admin)
+
+@user_views.route("/addcompetition", methods=['GET'])
+@login_required
+def get_add_competition():
+    is_adding = True
+    is_editting = False
+    return render_template('competition.html', is_adding=is_adding, is_editting=is_editting)
+
+@user_views.route("/editcompetition/<int:competition_id>", methods=['GET'])
+@login_required
+def get_edit_competition(competition_id):
+    compid = competition_id
+    competitions = Competition.query.all()
+    is_adding = False
+    is_editting = True
+    return render_template('competition.html', is_adding=is_adding, is_editting=is_editting, compid=compid, competitions=competitions)
 
 @user_views.route('/signup', methods=['GET'])
 def get_signup_page():
@@ -77,7 +95,7 @@ def user_login_api():
 @user_views.route("/signup", methods=['POST'])
 def signup_action():
   data = request.form
-  newuser = User(username=data['username'], password=data['password'])
+  newuser = User(username=data['username'], password=data['password'], is_admin=False)
   try:
     db.session.add(newuser)
     db.session.commit()
@@ -89,6 +107,37 @@ def signup_action():
     flash("Username or email already exists")
   return redirect(url_for('user_views.get_signup_page'))
 
+@user_views.route("/addcompetition", methods=['POST'])
+@login_required
+def addcompetition():
+    data = request.form
+    newcomp = Competition(name=data['name'], category=data['category'], winner=data['winner'], runnerup=data['runnerup'], description=data['description'])
+    db.session.add(newcomp)
+    db.session.commit()
+    flash('Competition added!')
+    return redirect(url_for('user_views.get_home_page'))
+
+@user_views.route("/editcompetition/<int:competition_id>", methods=['POST'])
+@login_required
+def editcompetition(competition_id):
+    data = request.form
+    compid = competition_id
+    Competition.edit_competition(compid, data['name'], data['category'], data['winner'], data['runnerup'], data['description'])
+    flash('Competiton editted!')
+
+    admin = current_user.is_admin
+    competitions = Competition.query.all()
+    return render_template("home.html", competitions=competitions, admin=admin)
+
+@user_views.route("/deletecompetition/<int:competition_id>", methods=['GET'])
+@login_required
+def removecompetition(competition_id):
+    Competition.delete_competition(competition_id)
+
+    admin = current_user.is_admin
+    competitions = Competition.query.all()
+    return render_template("home.html", competitions=competitions, admin=admin)
+    
 @user_views.route('/api/identify', methods=['GET'])
 @jwt_required()
 def identify_user_action():

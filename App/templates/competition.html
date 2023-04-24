@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+{% block title %}CodeX{% endblock %}
+{% block page %}<img class="grow-3" src="https://raw.githubusercontent.com/kates-dvs/INFO2602-Grp/home-works/images/CodeX%20Logo-white.png" alt="Logo">{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+
+{% if is_adding == True %}
+    <div class="content fill-space">
+        <div class="subcontent center-vertical">
+            <h4 class="center">New Competition</h4>
+
+        <form id="addcompForm" method="POST" action="/addcompetition" style="padding:1em">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input placeholder="Competition Name" name="name" type="text" class="validate">
+                    <label for="name"></label>
+                </div>
+  
+                <div class="input-field col s12">
+                    <input placeholder="Category" name="category" type="text" class="validate">
+                    <label for="category"></label>
+                </div>
+      
+                <div class="input-field col s12">
+                    <input placeholder="Winner" name="winner" type="text" class="validate">
+                    <label for="winner"></label>
+                </div>
+      
+                <div class="input-field col s12">
+                    <input placeholder="Runner-up" name="runnerup" type="text" class="validate">
+                    <label for="runnerup"></label>
+                </div>
+      
+                <div class="input-field col s12">
+                    <input placeholder="Description" name="description" type="text" class="validate">
+                    <label for="description"></label>
+                </div>
+            </div>
+
+                <div class="rowbtn justify-content">
+                    <div class="col s8 card-action left-align" style="margin-left:0;">
+                    <a href="/">&larr; Back to Home</a>
+                </div>
+                <div class="col s3 card-action right-align">
+                    <input type="submit" class="purple text-white btn" value="Submit">
+                </div>
+            </div>
+        
+        </form>
+        </div>
+    </div>
+{% endif %}
+
+{% if is_editting == True %}
+    <div class="content fill-space">
+        <div class="subcontent center-vertical">
+            <h4 class="center">Edit Competition</h4>
+        
+    {% for competition in competitions %}
+        {% if competition.id == compid %}
+        <form id="editForm" method="POST" action="/editcompetition/{{compid}}" style="padding:1em">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input placeholder="name" name="name" type="text" class="validate" value="{{competition.name}}">
+                    <label for="name"></label>
+                </div>
+  
+                <div class="input-field col s12">
+                    <input placeholder="category" name="category" type="text" class="validate" value="{{competition.category}}">
+                    <label for="category"></label>
+                </div>
+      
+                <div class="input-field col s12">
+                    <input placeholder="winner" name="winner" type="text" class="validate" value="{{competition.winner}}">
+                    <label for="winner"></label>
+                </div>
+      
+                <div class="input-field col s12">
+                    <input placeholder="runnerup" name="runnerup" type="text" class="validate" value="{{competition.runnerup}}">
+                    <label for="runnerup"></label>
+                </div>
+      
+                <div class="input-field col s12">
+                    <input placeholder="description" name="description" type="text" class="validate" value="{{competition.description}}">
+                    <label for="description"></label>
+                </div>
+            </div>
+
+                <div class="rowbtn justify-content">
+                    <div class="col s8 card-action left-align" style="margin-left:0;">
+                    <a href="/">&larr; Back to Home</a>
+                </div>
+                <div class="col s3 card-action right-align">
+                    <input type="submit" class="purple text-white btn" value="Submit">
+                </div>
+            </div>
+        
+        </form>
+        </div>
+        {% endif %}
+    {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock %}
