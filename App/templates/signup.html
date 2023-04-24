@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block page %}<img class="grow-3" src="https://raw.githubusercontent.com/kates-dvs/INFO2602-Grp/home-works/images/CodeX%20Logo-white.png" alt="Logo">{% endblock %}
+
+
+{% block content %}
+
+<div class="content fill-space">
+  <img class="grow-2" src="https://images.pexels.com/photos/965345/pexels-photo-965345.jpeg?auto=compress&cs=tinysrgb&w=600">
+  <div class="subcontent center-vertical">
+    <h4 class="center">Sign Up</h4>
+
+    <form id="signupForm" method="POST" action="/signup" style="padding:1em">
+      <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="Username" name="username" type="text" class="validate">
+          <label for="username"></label>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="Password" name="password" type="password" class="validate">
+          <label for="password"></label>
+        </div>
+      </div>
+      <div class="rowbtn justify-content">
+        <div class="col s8 card-action left-align" style="margin-left:0;">
+          <a href="/">&larr; Back to Login</a>
+        </div>
+        <div class="col s3 card-action right-align">
+          <input type="submit" class="purple text-white btn" value="Sign up">
+        </div>
+      </div>
+  
+    </form>
+  </div>
+</div>
+{% endblock %}

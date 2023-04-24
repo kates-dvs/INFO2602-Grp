@@ -1,8 +1,11 @@
 import click, pytest, sys
+import csv
+
 from flask import Flask
 from flask.cli import with_appcontext, AppGroup
 
 from App.database import db, get_migrate
+from App.models.user import Competition, CompetitonUser, User
 from App.main import create_app
 from App.controllers import ( create_user, get_all_users_json, get_all_users )
 
@@ -10,13 +13,23 @@ from App.controllers import ( create_user, get_all_users_json, get_all_users )
 
 app = create_app()
 migrate = get_migrate(app)
+competition = []
 
 # This command creates and initializes the database
 @app.cli.command("init", help="Creates and initializes the database")
 def initialize():
     db.drop_all()
     db.create_all()
-    create_user('bob', 'bobpass')
+    bob = create_user('bob', 'bobpass', True)
+    db.session.add(bob)
+
+    with open('competitions.csv', newline='', encoding='latin-1') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            competition = Competition(name=row['name'], category=row['category'], winner=row['winner'], runnerup=row['runnerup'], description=row['description'])
+            db.session.add(competition)
+        db.session.commit()
+
     print('database intialized')
 
 '''

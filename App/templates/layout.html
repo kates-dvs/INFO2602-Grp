@@ -1,47 +1,111 @@
 <!doctype html>
 <html>
-  <head>
-  
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-     <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>{% block title %}{% endblock %}</title>
 
-  </head>
-  <body>
-    <nav class="purple">
-      <div class="nav-wrapper">
-        <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
-        <div class="nav-wrapper">
-            <ul id="nav-mobile" class="left">
-                <li><a href="/">Home</a></li>
-                <li><a href="/users">Users Jinja</a></li>
-                <li><a href="/static/users">Users JS</a></li>
-            </ul>
-        </div>
-      </div>
-    </nav>
+<head>
+
+  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="/static/style.css">
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{% endblock %}</title>
+  <style>
+    html{
+      height: 100vh;
+    }
     
-    {% with messages = get_flashed_messages() %}
+    body{
+      height: 100%;
+      background-color: #8bd8f0;
+    }
+
+    .nav-wrapper{
+      background-color: #6219b0
+    }
+
+    h1{
+      font-family: 'Courier New', Courier, monospace;
+      border-bottom:1px solid #000;
+      margin-left: 10px;
+    }
+
+    p{
+      margin-left: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    .card{
+    display: flex;
+    flex-direction: column;
+    border: 10px solid #524a4c;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    width: 1000px;
+    left: 25%;
+  }
+    
+    .addbtn{
+      margin: 10px;
+    }
+
+    .row{
+      background-color: white;
+      border: 2px solid #524a4c;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .messages{
+      background-color: white;
+    }
+
+    .grow-3{
+      width: 15%;
+      height: auto;
+    }
+
+    .footer{
+      box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+  </style>
+
+</head>
+
+<body>
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#!" class="brand-logo center">{% block page %}{% endblock %}</a>
+      {% block link %}{% endblock %}
+    </div>
+  </nav>
+  <div>
+    <div class="messages">
+      {% with messages = get_flashed_messages() %}
       {% if messages %}
-      <nav class="white black-text" style="padding: 10px">
-        <div class="nav-wrapper">
-            <ul class="flashes">
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        </div>
-      </nav>
+      <div id="alert" class="col s10 offset-s1">
+        <a href="" id="close">&times;</a>
+        {% for message in messages %}
+        <div style="font-weight: bold;text-align: center;font-size: 1.2em;margin-top: -5px;">{{ message }}</div>
+        {% endfor %}
+      </div>
+
       {% endif %}
-    {% endwith %}
+      {% endwith %}
+    </div>
+    {% block content %}{% endblock %}
+  </div>
 
-    <div class="container" id="content">{% block content %}{% endblock %}</div>
+  <footer>
+    <div class="footer">
+      <p class="brand-logo center">CodeX</p>
+    </div>
+  </footer>
+</body>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  </body>
 </html>
+
+
