@@ -15,7 +15,7 @@ from App.controllers import (
 
 user_views = Blueprint('user_views', __name__, template_folder='../templates')
 
-@user_views.route('/', methods=['GET'])
+@user_views.route('/home', methods=['GET'])
 @login_required
 def get_home_page():
     admin = current_user.is_admin
@@ -27,7 +27,7 @@ def get_user_page():
     users = get_all_users()
     return render_template('users.html', users=users)
 
-@user_views.route('/login', methods=['GET'])
+@user_views.route('/', methods=['GET'])
 def get_login_page():
     users = get_all_users()
     return render_template('login.html', users=users)
@@ -80,7 +80,7 @@ def create_user_endpoint():
     create_user(data['username'], data['password'])
     return jsonify({'message': f"user {data['username']} created"})
 
-@user_views.route('/login', methods=['POST'])
+@user_views.route('/', methods=['POST'])
 def user_login_api():
     data = request.form
     user = User.query.filter_by(username=data['username']).first()
@@ -90,7 +90,7 @@ def user_login_api():
         return redirect(url_for('user_views.get_home_page'))
     else:
         flash('Invalid username or password')
-    return redirect('/login')
+    return redirect('/home')
 
 @user_views.route("/signup", methods=['POST'])
 def signup_action():

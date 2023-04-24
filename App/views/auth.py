@@ -13,7 +13,7 @@ from App.controllers import (
 
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
 
-@auth_views.route('/', methods=['GET'])
+@auth_views.route('/home', methods=['GET'])
 @login_required
 def get_home_page():
     competitions = Competition.query.all()
@@ -24,7 +24,7 @@ def get_user_page():
     users = get_all_users()
     return render_template('users.html', users=users)
 
-@auth_views.route('/login', methods=['GET'])
+@auth_views.route('/', methods=['GET'])
 def get_login_page():
     users = get_all_users()
     return render_template('login.html', users=users)
@@ -52,7 +52,7 @@ def create_user_endpoint():
     create_user(data['username'], data['password'])
     return jsonify({'message': f"user {data['username']} created"})
 
-@auth_views.route('/login', methods=['POST'])
+@auth_views.route('/', methods=['POST'])
 def user_login_api():
     data = request.form
     user = User.query.filter_by(username=data['username']).first()
@@ -62,7 +62,7 @@ def user_login_api():
         return redirect(url_for('auth_views.get_home_page'))
     else:
         flash('Invalid username or password')
-    return redirect('/login')
+    return redirect('/home')
 
 @auth_views.route('/api/identify', methods=['GET'])
 @jwt_required()
