@@ -71,7 +71,18 @@ def create_app(config={}):
     setup_jwt(app)
     app.app_context().push()
     with app.app_context():
+        db.drop_all()
         db.create_all()
+        bob = create_user('bob', 'bobpass', True)
+        db.session.add(bob)
+
+        with open('competitions.csv', newline='', encoding='latin-1') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                competition = Competition(name=row['name'], category=row['category'], winner=row['winner'], runnerup=row['runnerup'], description=row['description'])
+                db.session.add(competition)
+            db.session.commit()
+        print('database intialized')
     return app
 
 app = create_app()
