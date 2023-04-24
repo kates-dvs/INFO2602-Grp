@@ -14,6 +14,14 @@ def init():
     db.drop_all()
     db.create_all()
     create_user('bob', 'bobpass')
+
+    with open('competitions.csv', newline='', encoding='latin-1') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            competition = Competition(name=row['name'], category=row['category'], winner=row['winner'], runnerup=row['runnerup'], description=row['description'])
+            db.session.add(competition)
+        db.session.commit()
+    flash('database initalized')
     return jsonify(message='db initialized!')
 
 @index_views.route('/health', methods=['GET'])
