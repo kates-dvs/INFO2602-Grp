@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 from datetime import timedelta
 from .models import User, db
+from App.database import db
 
 
 from App.database import init_db
@@ -69,6 +70,8 @@ def create_app(config={}):
     init_db(app)
     setup_jwt(app)
     app.app_context().push()
+    with app.app_context():
+        db.create_all()
     return app
 
 app = create_app()
