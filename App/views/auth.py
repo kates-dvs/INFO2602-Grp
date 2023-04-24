@@ -62,7 +62,7 @@ def user_login_api():
         return redirect(url_for('auth_views.get_home_page'))
     else:
         flash('Invalid username or password')
-    return redirect('/home')
+    return redirect('/')
 
 @auth_views.route('/api/identify', methods=['GET'])
 @jwt_required()

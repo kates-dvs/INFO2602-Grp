@@ -90,7 +90,7 @@ def user_login_api():
         return redirect(url_for('user_views.get_home_page'))
     else:
         flash('Invalid username or password')
-    return redirect('/home')
+    return redirect('/')
 
 @user_views.route("/signup", methods=['POST'])
 def signup_action():
