@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block title %}CodeX{% endblock %}
+{% block page %}<img class="grow-3" src="https://raw.githubusercontent.com/kates-dvs/INFO2602-Grp/home-works/images/CodeX%20Logo-white.png" alt="Logo">{% endblock %}
+
+{{ super() }}
+
+{% block link%}
+<ul id="nav-mobile" class="right">
+    <li><a href="/logout">Logout</a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h1><b>Competition Results</b></h1>
+        <p>Below is a list winners & runners-up of various coding competitions held by different organizations for programmers of all skill levels.</p>
+    </div>
+
+    <div class="card">
+        <div class="col m4">
+            <table>
+                <tr>
+                    <th>Competition Name</th>
+                    <th>Category</th>
+                    <th>Winner</th>
+                    <th>Runner-up</th>
+                    <th>Description</th>
+                </tr>
+                {% for competition in competitions %}
+                    <form name="ExpandDescription" class="card">
+                        <tr>
+                            <td>{{competition.name}}</td>
+                            <td>{{competition.category}}</td>
+                            <td>{{competition.winner}}</td>
+                            <td>{{competition.runnerup}}</td>
+                            <td>
+                                {% if competition.id != compid %}
+                                    <div class="cardActions">
+                                        {% if admin == False %}
+                                            <a class="btn aquamarine right" href="/competition/{{competition.id}}" id="ExpandBtn" style="position:relative; left:-65px; bottom:0px;">Description</a>
+                                        {% endif %}
+
+                                        {% if admin == True %}
+                                            <a class="btn aquamarine right" href="/competition/{{competition.id}}" id="ExpandBtn" style="position:relative; left:-200px; bottom:0px;">Description</a>
+
+                                            <a class="btn aquamarine right fixed-top" href="/editcompetition/{{competition.id}}" id="EditBtn" style="position:relative; left:0px; bottom:0px;">Edit</a>
+                                        
+                                            <a class="btn aquamarine right fixed-top" href="/deletecompetition/{{competition.id}}" id="DeleteBtn" style="position:relative; left:170px; bottom:0px;">Remove</a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
+                                {% if competition.id == compid %}
+                                    <div id="expandedDesc">{{competition.description}}</div>
+                                    {% if admin == True %}
+                                        <a class="btn aquamarine right fixed-top" href="/editcompetition/{{competition.id}}" id="EditBtn" style="position:relative; left:-125px; bottom:0px;">Edit</a>
+
+                                        <a class="btn aquamarine right fixed-top" href="/deletecompetition/{{competition.id}}" id="DeleteBtn" style="position:relative; left:45px; bottom:0px;">Remove</a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </form>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    {% if admin == True %}
+        <div class="addbtn">
+            <a class="btn aquamarine right" href="/addcompetition" id="ExpandBtn" style="position:fixed; right:200px; bottom:500px;">Add a competition</a>
+        </div>
+    {% endif %}
+
+    <script>
+        var compElem = document.getElementById('expandedDesc');
+        compElem.scrollIntoView();
+    </script>
+{% endblock %}
