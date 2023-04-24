@@ -6,7 +6,7 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 from datetime import timedelta
-from .models import User, Competition, CompetitionUser, db
+from .models import User, Competition, CompetitonUser, db
 from App.database import db
 from App.controllers import ( create_user, get_all_users_json, get_all_users )
 
